@@ -1,0 +1,114 @@
+# ==============================================================================
+# Environment & Secrets
+# ==============================================================================
+.env
+.env.*
+!.env.example
+!.env.test
+*.pem
+*.key
+*.cert
+*.crt
+
+# ==============================================================================
+# Go artifacts & binaries
+# ==============================================================================
+# Compiled binaries and build outputs
+/bin/
+bin/
+/dist/
+dist/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binaries & coverage
+*.test
+*.out
+profile.out
+coverage.txt
+coverage.out
+
+# Delve debugger
+__debug_bin*
+
+# Go workspace file
+go.work
+go.work.sum
+
+# Go vendor (if not intentionally tracked)
+# vendor/
+
+# ==============================================================================
+# Database & Cache local artifacts
+# ==============================================================================
+pgdata/
+*.rdb
+*.sqlite
+*.sqlite3
+*.db
+
+# ==============================================================================
+# Logs & Temporary files
+# ==============================================================================
+*.log
+logs/
+tmp/
+temp/
+.tmp/
+
+# ==============================================================================
+# IDE & Code Editors
+# ==============================================================================
+# JetBrains (GoLand, IntelliJ IDEA)
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Vim / Emacs / Nano
+*~
+*.swp
+*.swo
+*.swn
+.#*
+\#*#
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# ==============================================================================
+# Operating System files
+# ==============================================================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+.Trash-*
