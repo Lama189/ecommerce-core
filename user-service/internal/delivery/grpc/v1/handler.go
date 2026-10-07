@@ -77,6 +77,25 @@ func (s *UserGRPCServer) Login(ctx context.Context, req *userpb.LoginRequest) (*
 	}, nil
 }
 
+func (s *UserGRPCServer) Refresh(ctx context.Context, req *userpb.RefreshRequest) (*userpb.RefreshResponse, error) {
+	if req.GetRefreshToken() == "" {
+		return nil, status.Error(codes.InvalidArgument, "refresh token is required")
+	}
+
+	tokens, err := s.service.Refresh(ctx, req.GetRefreshToken())
+	if err != nil {
+		if errors.Is(err, user.ErrTokenRevoked) {
+			return nil, status.Error(codes.Unauthenticated, "refresh token is revoked or expired")
+		}
+		return nil, status.Error(codes.Unauthenticated, "invalid refresh token")
+	}
+
+	return &userpb.RefreshResponse{
+		AccessToken:  tokens.AccessToken,
+		RefreshToken: tokens.RefreshToken,
+	}, nil
+}
+
 func (s *UserGRPCServer) GetUser(ctx context.Context, req *userpb.GetUserRequest) (*userpb.GetUserResponse, error) {
 	userID, err := uuid.Parse(req.GetId())
 	if err != nil {

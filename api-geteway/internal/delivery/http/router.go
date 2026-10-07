@@ -24,6 +24,7 @@ func NewRouter(handler *UserHandler, tokenValidator jwt.TokenValidator) *chi.Mux
 		r.Route("/auth", func(r chi.Router) {
 			r.Post("/register", handler.Register)
 			r.Post("/login", handler.Login)
+			r.Post("/refresh", handler.Refresh)
 		})
 
 		r.Group(func(r chi.Router) {

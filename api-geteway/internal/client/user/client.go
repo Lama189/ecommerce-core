@@ -83,6 +83,25 @@ func (c *client) Login(ctx context.Context, req http.LoginRequest) (*http.AuthRe
 	}, nil
 }
 
+func (c *client) Refresh(ctx context.Context, req http.RefreshRequest) (*http.RefreshResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, c.timeout)
+	defer cancel()
+
+	pbReq := &userpb.RefreshRequest{
+		RefreshToken: req.RefreshToken,
+	}
+
+	pbRes, err := c.grpcClient.Refresh(ctx, pbReq)
+	if err != nil {
+		return nil, err
+	}
+
+	return &http.RefreshResponse{
+		AccessToken:  pbRes.GetAccessToken(),
+		RefreshToken: pbRes.GetRefreshToken(),
+	}, nil
+}
+
 func (c *client) GetMe(ctx context.Context, userID uuid.UUID) (*http.UserResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, c.timeout)
 	defer cancel()

@@ -100,6 +100,10 @@ func (s *Service) Refresh(ctx context.Context, refreshToken string) (*TokensOutp
 		return nil, fmt.Errorf("generate tokens: %w", err)
 	}
 
+	if err := s.cache.SetRefreshToken(ctx, u.ID, newRefreshToken); err != nil {
+		return nil, fmt.Errorf("save session to cache: %w", err)
+	}
+
 	return toTokensOutputDTO(newAccessToken, newRefreshToken), nil
 }
 

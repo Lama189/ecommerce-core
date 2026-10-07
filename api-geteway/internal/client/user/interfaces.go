@@ -11,5 +11,6 @@ import (
 type Client interface {
 	Register(ctx context.Context, req http.RegisterRequest) (*http.UserResponse, error)
 	Login(ctx context.Context, req http.LoginRequest) (*http.AuthResponse, error)
+	Refresh(ctx context.Context, req http.RefreshRequest) (*http.RefreshResponse, error)
 	GetMe(ctx context.Context, userID uuid.UUID) (*http.UserResponse, error)
 }

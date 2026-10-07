@@ -45,6 +45,22 @@ func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 	SendJSON(w, http.StatusOK, res)
 }
 
+func (h *UserHandler) Refresh(w http.ResponseWriter, r *http.Request) {
+	var req RefreshRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		SendError(w, http.StatusBadRequest, "invalid request body")
+		return
+	}
+
+	res, err := h.client.Refresh(r.Context(), req)
+	if err != nil {
+		HandleGRPCError(w, err)
+		return
+	}
+
+	SendJSON(w, http.StatusOK, res)
+}
+
 func (h *UserHandler) GetMe(w http.ResponseWriter, r *http.Request) {
 	userID, ok := UserIDFromContext(r.Context())
 	if !ok {

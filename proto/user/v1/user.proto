@@ -9,6 +9,7 @@ import "google/protobuf/timestamp.proto";
 service UserService {
   rpc Register(RegisterRequest) returns (RegisterResponse);
   rpc Login(LoginRequest) returns (LoginResponse);
+  rpc Refresh(RefreshRequest) returns (RefreshResponse);
   rpc GetUser(GetUserRequest) returns (GetUserResponse);
 }
 
@@ -36,6 +37,15 @@ message LoginResponse {
   User user = 1;
   string access_token = 2;
   string refresh_token = 3;
+}
+
+message RefreshRequest {
+  string refresh_token = 1;
+}
+
+message RefreshResponse {
+  string access_token = 1;
+  string refresh_token = 2;
 }
 
 message GetUserRequest {
