@@ -5,14 +5,14 @@ WORKDIR /app
 RUN apk add --no-cache ca-certificates git
 
 COPY gen/go ./gen/go
-COPY user-service ./user-service
+COPY api-geteway ./api-geteway
 
-WORKDIR /app/user-service
+WORKDIR /app/api-geteway
 RUN go mod download
 
 RUN CGO_ENABLED=0 GOOS=linux go build \
     -ldflags="-s -w" \
-    -o /app/bin/user-service ./cmd/app/main.go
+    -o /app/bin/api-gateway ./cmd/app/main.go
 
 FROM alpine:3.20
 
@@ -21,10 +21,10 @@ RUN apk add --no-cache ca-certificates tzdata && \
 
 WORKDIR /app
 
-COPY --from=builder /app/bin/user-service .
+COPY --from=builder /app/bin/api-gateway .
 
 USER appuser
 
-EXPOSE 50051
+EXPOSE 8080
 
-CMD ["./user-service"]
+CMD ["./api-gateway"]

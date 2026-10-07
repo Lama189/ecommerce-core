@@ -9,9 +9,14 @@ import (
 )
 
 type Config struct {
+	GRPC     GRPCConfig
 	JWT      JWTConfig
 	Postgres PostgresConfig
 	Redis    RedisConfig
+}
+
+type GRPCConfig struct {
+	Port string `env:"GRPC_PORT" env-default:":50051"`
 }
 
 type JWTConfig struct {
@@ -43,7 +48,7 @@ func Load() (*Config, error) {
 	}
 
 	if err := cleanenv.ReadEnv(&cfg); err != nil {
-		return nil, fmt.Errorf("failed to read env variables^ %w", err)
+		return nil, fmt.Errorf("failed to read env variables: %w", err)
 	}
 
 	return &cfg, nil

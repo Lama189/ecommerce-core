@@ -6,28 +6,33 @@ import (
 	"github.com/google/uuid"
 )
 
-type registerRequest struct {
+type RegisterRequest struct {
 	Phone    string `json:"phone"`
 	Password string `json:"password"`
 }
 
-type loginRequest struct {
+type LoginRequest struct {
 	Phone    string `json:"phone"`
 	Password string `json:"password"`
 }
 
-type refreshRequest struct {
+type RefreshRequest struct {
 	RefreshToken string `json:"refresh_token"`
 }
 
-type userResponse struct {
+type UserResponse struct {
 	ID        uuid.UUID `json:"id"`
 	Phone     string    `json:"phone"`
 	CreatedAt time.Time `json:"created_at"`
 }
 
-type authResponse struct {
-	User         userResponse `json:"user"`
+type AuthResponse struct {
+	User         UserResponse `json:"user"`
 	AccessToken  string       `json:"access_token"`
 	RefreshToken string       `json:"refresh_token"`
+}
+
+type RefreshResponse struct {
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
 }
