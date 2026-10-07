@@ -7,8 +7,18 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
+type TokenValidator interface {
+	ValidateAccessToken(tokenStr string) (*UserClaims, error)
+}
+
 type JWTValidator struct {
 	secretKey []byte
+}
+
+func NewValidator(secretKey string) *JWTValidator {
+	return &JWTValidator{
+		secretKey: []byte(secretKey),
+	}
 }
 
 func (v *JWTValidator) ValidateAccessToken(tokenStr string) (*UserClaims, error) {
