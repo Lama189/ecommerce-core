@@ -2,21 +2,21 @@ package main
 
 import (
 	"context"
-	"errors"
 	"log"
-	"net/http"
+	"net"
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 
+	userpb "github.com/Lama189/ecommerce-core/gen/go/user/v1"
 	"github.com/Lama189/ecommerce-core/user-service/internal/config"
-	deliveryHttp "github.com/Lama189/ecommerce-core/user-service/internal/delivery/http"
+	deliveryGrpc "github.com/Lama189/ecommerce-core/user-service/internal/delivery/grpc/v1"
 	"github.com/Lama189/ecommerce-core/user-service/internal/infrastructure/hasher"
 	"github.com/Lama189/ecommerce-core/user-service/internal/infrastructure/jwt"
 	"github.com/Lama189/ecommerce-core/user-service/internal/repository/postgres"
 	"github.com/Lama189/ecommerce-core/user-service/internal/repository/redis"
 	"github.com/Lama189/ecommerce-core/user-service/internal/service/user"
+	"google.golang.org/grpc"
 )
 
 func main() {
@@ -56,18 +56,19 @@ func main() {
 
 	userService := user.NewService(userRepo, userCache, pwdHasher, jwtManager)
 
-	userHandler := deliveryHttp.NewUserHandler(userService)
-	router := deliveryHttp.NewRouter(userHandler, jwtManager)
+	grpcServer := grpc.NewServer()
+	userGrpcHandler := deliveryGrpc.NewUserGRPCServer(userService)
+	userpb.RegisterUserServiceServer(grpcServer, userGrpcHandler)
 
-	srv := &http.Server{
-		Addr:    ":8080",
-		Handler: router,
+	lis, err := net.Listen("tcp", cfg.GRPC.Port)
+	if err != nil {
+		log.Fatalf("failed to listen on %s: %v", cfg.GRPC.Port, err)
 	}
 
 	go func() {
-		log.Println("Starting HTTP server on :8080")
-		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-			log.Fatalf("HTTP server error: %v", err)
+		log.Printf("Starting gRPC server on %s", cfg.GRPC.Port)
+		if err := grpcServer.Serve(lis); err != nil {
+			log.Fatalf("gRPC server error: %v", err)
 		}
 	}()
 
@@ -75,14 +76,7 @@ func main() {
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 
-	log.Println("Shutting down server...")
-
-	shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
-	if err := srv.Shutdown(shutdownCtx); err != nil {
-		log.Fatalf("Server forced to shutdown: %v", err)
-	}
-
+	log.Println("Shutting down gRPC server...")
+	grpcServer.GracefulStop()
 	log.Println("Server exited properly")
 }
