@@ -16,7 +16,6 @@ func NewRouter(handler *UserHandler, tokenValidator jwt.TokenValidator) *chi.Mux
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 
-	// Liveness/Readiness probe
 	r.Get("/healthz", func(w http.ResponseWriter, r *http.Request) {
 		SendJSON(w, http.StatusOK, map[string]string{"status": "ok"})
 	})

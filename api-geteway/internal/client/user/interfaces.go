@@ -2,7 +2,8 @@ package user
 
 import (
 	"context"
-	"uuid"
+
+	"github.com/google/uuid"
 
 	"github.com/Lama189/ecommerce-core/api-geteway/internal/delivery/http"
 )

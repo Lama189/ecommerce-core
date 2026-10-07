@@ -7,10 +7,13 @@ import (
 	"sync"
 	"time"
 
+	chiMiddleware "github.com/go-chi/chi/v5/middleware"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/metadata"
+
+	"github.com/Lama189/ecommerce-core/api-geteway/internal/delivery/http"
 )
 
 type Config struct {
@@ -52,7 +55,10 @@ func (m *Manager) GetConn(ctx context.Context, target string, extraOpts ...grpc.
 			Timeout:             3 * time.Second,
 			PermitWithoutStream: true,
 		}),
-		grpc.WithChainUnaryInterceptor(),
+		grpc.WithChainUnaryInterceptor(
+			m.metadataPropagationInterceptor(),
+			m.loggingInterceptor(),
+		),
 	}
 
 	opts = append(opts, extraOpts...)
@@ -99,13 +105,20 @@ func (m *Manager) metadataPropagationInterceptor() grpc.UnaryClientInterceptor {
 	) error {
 		md := metadata.MD{}
 
-		if reqID, ok := ctx.Value("requestID").(string); ok && reqID != "" {
+		reqID := chiMiddleware.GetReqID(ctx)
+		if reqID == "" {
+			if v, ok := ctx.Value("requestID").(string); ok {
+				reqID = v
+			}
+		}
+		if reqID != "" {
 			md.Set("x-request-id", reqID)
 		}
-		if userID, ok := ctx.Value("userID").(string); ok && userID != "" {
-			md.Set("x-user-id", userID)
+
+		if userID, ok := http.UserIDFromContext(ctx); ok {
+			md.Set("x-user-id", userID.String())
 		}
-		if role, ok := ctx.Value("userRole").(string); ok && role != "" {
+		if role, ok := http.UserRoleFromContext(ctx); ok && role != "" {
 			md.Set("x-user-role", role)
 		}
 
