@@ -23,6 +23,7 @@ type RefreshRequest struct {
 type UserResponse struct {
 	ID        uuid.UUID `json:"id"`
 	Phone     string    `json:"phone"`
+	Role      string    `json:"role"`
 	CreatedAt time.Time `json:"created_at"`
 }
 

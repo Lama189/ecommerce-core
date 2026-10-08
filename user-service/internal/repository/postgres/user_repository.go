@@ -19,8 +19,8 @@ func NewUserRepository(pool *pgxpool.Pool) *UserRepository {
 
 func (r *UserRepository) Create(ctx context.Context, user *domain.User) error {
 	const query = `
-		INSERT INTO users (phone, password_hash, created_at, updated_at)
-		VALUES ($1, $2, $3, $4)
+		INSERT INTO users (phone, password_hash, role, created_at, updated_at)
+		VALUES ($1, $2, $3, $4, $5)
 		RETURNING id;
 	`
 
@@ -29,6 +29,7 @@ func (r *UserRepository) Create(ctx context.Context, user *domain.User) error {
 		query,
 		user.Phone,
 		user.PasswordHash,
+		string(user.Role),
 		user.CreatedAt,
 		user.UpdatedAt,
 	).Scan(&user.ID)
@@ -42,7 +43,7 @@ func (r *UserRepository) Create(ctx context.Context, user *domain.User) error {
 
 func (r *UserRepository) GetByID(ctx context.Context, id uuid.UUID) (*domain.User, error) {
 	const query = `
-		SELECT id, phone, password_hash, created_at, updated_at
+		SELECT id, phone, password_hash, role, created_at, updated_at
 		FROM users
 		WHERE id = $1;
 	`
@@ -53,12 +54,13 @@ func (r *UserRepository) GetByID(ctx context.Context, id uuid.UUID) (*domain.Use
 		&m.ID,
 		&m.Phone,
 		&m.PasswordHash,
+		&m.Role,
 		&m.CreatedAt,
 		&m.UpdatedAt,
 	)
 
 	if err != nil {
-		return nil, fmt.Errorf("get user by id %d: %w", id, mapError(err))
+		return nil, fmt.Errorf("get user by id %s: %w", id, mapError(err))
 	}
 
 	return m.toDomain(), nil
@@ -66,7 +68,7 @@ func (r *UserRepository) GetByID(ctx context.Context, id uuid.UUID) (*domain.Use
 
 func (r *UserRepository) GetByPhone(ctx context.Context, phone string) (*domain.User, error) {
 	const query = `
-		SELECT id, phone, password_hash, created_at, updated_at
+		SELECT id, phone, password_hash, role, created_at, updated_at
 		FROM users
 		WHERE phone = $1;
 	`
@@ -77,6 +79,7 @@ func (r *UserRepository) GetByPhone(ctx context.Context, phone string) (*domain.
 		&m.ID,
 		&m.Phone,
 		&m.PasswordHash,
+		&m.Role,
 		&m.CreatedAt,
 		&m.UpdatedAt,
 	)
@@ -91,8 +94,8 @@ func (r *UserRepository) GetByPhone(ctx context.Context, phone string) (*domain.
 func (r *UserRepository) Update(ctx context.Context, user *domain.User) error {
 	const query = `
 		UPDATE users
-		SET phone = $1, password_hash = $2, updated_at = $3
-		WHERE id = $4;
+		SET phone = $1, password_hash = $2, role = $3, updated_at = $4
+		WHERE id = $5;
 	`
 
 	cmdTag, err := r.pool.Exec(
@@ -100,6 +103,7 @@ func (r *UserRepository) Update(ctx context.Context, user *domain.User) error {
 		query,
 		user.Phone,
 		user.PasswordHash,
+		string(user.Role),
 		user.UpdatedAt,
 		user.ID,
 	)

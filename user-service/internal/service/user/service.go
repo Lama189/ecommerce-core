@@ -59,7 +59,7 @@ func (s *Service) Login(ctx context.Context, phone, password string) (*UserWithT
 
 	payload := TokenPayload{
 		UserID: u.ID,
-		Role:   "user",
+		Role:   string(u.Role),
 	}
 
 	accessToken, refreshToken, err := s.jwt.GenerateTokenPair(payload)
@@ -92,7 +92,7 @@ func (s *Service) Refresh(ctx context.Context, refreshToken string) (*TokensOutp
 
 	newPayload := TokenPayload{
 		UserID: u.ID,
-		Role:   payload.Role,
+		Role:   string(u.Role),
 	}
 
 	newAccessToken, newRefreshToken, err := s.jwt.GenerateTokenPair(newPayload)

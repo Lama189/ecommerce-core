@@ -17,6 +17,7 @@ message User {
   string id = 1;
   string phone = 2;
   google.protobuf.Timestamp created_at = 3;
+  string role = 4;
 }
 
 message RegisterRequest {

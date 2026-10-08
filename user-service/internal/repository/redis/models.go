@@ -8,21 +8,23 @@ import (
 )
 
 type userCacheModel struct {
-	ID        uuid.UUID `json:"id"`
-	Phone     string    `json:"phone"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	ID        uuid.UUID   `json:"id"`
+	Phone     string      `json:"phone"`
+	Role      domain.Role `json:"role"`
+	CreatedAt time.Time   `json:"created_at"`
+	UpdatedAt time.Time   `json:"updated_at"`
 }
 
 func fromDomain(u *domain.User) userCacheModel {
 	return userCacheModel{
 		ID:        u.ID,
 		Phone:     u.Phone,
+		Role:      u.Role,
 		CreatedAt: u.CreatedAt,
 		UpdatedAt: u.UpdatedAt,
 	}
 }
 
 func (m userCacheModel) toDomain() *domain.User {
-	return domain.RestoreUser(m.ID, m.Phone, "", m.CreatedAt, m.UpdatedAt)
+	return domain.RestoreUser(m.ID, m.Phone, "", m.Role, m.CreatedAt, m.UpdatedAt)
 }

@@ -15,6 +15,7 @@ type CreateUserDTO struct {
 type UserOutputDTO struct {
 	ID        uuid.UUID
 	Phone     string
+	Role      string
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
@@ -37,6 +38,7 @@ func toOutputDTO(user *domain.User) *UserOutputDTO {
 	return &UserOutputDTO{
 		ID:        user.ID,
 		Phone:     user.Phone,
+		Role:      string(user.Role),
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 	}

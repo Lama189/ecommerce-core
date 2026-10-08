@@ -48,6 +48,7 @@ func (s *UserGRPCServer) Register(ctx context.Context, req *userpb.RegisterReque
 		User: &userpb.User{
 			Id:        u.ID.String(),
 			Phone:     u.Phone,
+			Role:      u.Role,
 			CreatedAt: timestamppb.New(u.CreatedAt),
 		},
 	}, nil
@@ -70,6 +71,7 @@ func (s *UserGRPCServer) Login(ctx context.Context, req *userpb.LoginRequest) (*
 		User: &userpb.User{
 			Id:        res.User.ID.String(),
 			Phone:     res.User.Phone,
+			Role:      res.User.Role,
 			CreatedAt: timestamppb.New(res.User.CreatedAt),
 		},
 		AccessToken:  res.Tokens.AccessToken,
@@ -114,6 +116,7 @@ func (s *UserGRPCServer) GetUser(ctx context.Context, req *userpb.GetUserRequest
 		User: &userpb.User{
 			Id:        u.ID.String(),
 			Phone:     u.Phone,
+			Role:      u.Role,
 			CreatedAt: timestamppb.New(u.CreatedAt),
 		},
 	}, nil

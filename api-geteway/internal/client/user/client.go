@@ -49,6 +49,7 @@ func (c *client) Register(ctx context.Context, req http.RegisterRequest) (*http.
 	return &http.UserResponse{
 		ID:        userID,
 		Phone:     pbRes.GetUser().GetPhone(),
+		Role:      pbRes.GetUser().GetRole(),
 		CreatedAt: pbRes.GetUser().CreatedAt.AsTime(),
 	}, nil
 }
@@ -76,6 +77,7 @@ func (c *client) Login(ctx context.Context, req http.LoginRequest) (*http.AuthRe
 		User: http.UserResponse{
 			ID:        userID,
 			Phone:     pbRes.GetUser().GetPhone(),
+			Role:      pbRes.GetUser().GetRole(),
 			CreatedAt: pbRes.GetUser().CreatedAt.AsTime(),
 		},
 		AccessToken:  pbRes.GetAccessToken(),
@@ -123,6 +125,7 @@ func (c *client) GetMe(ctx context.Context, userID uuid.UUID) (*http.UserRespons
 	return &http.UserResponse{
 		ID:        parsedID,
 		Phone:     pbRes.GetUser().GetPhone(),
+		Role:      pbRes.GetUser().GetRole(),
 		CreatedAt: pbRes.GetUser().GetCreatedAt().AsTime(),
 	}, nil
 }
