@@ -1,0 +1,129 @@
+package domain
+
+import (
+	"fmt"
+	"strings"
+	"time"
+
+	"github.com/google/uuid"
+)
+
+type TrackStatus string
+
+const (
+	TrackStatusDraft      TrackStatus = "draft"
+	TrackStatusProcessing TrackStatus = "processing"
+	TrackStatusReady      TrackStatus = "ready"
+	TrackStatusFailed     TrackStatus = "failed"
+)
+
+func (s TrackStatus) IsValid() bool {
+	switch s {
+	case TrackStatusDraft, TrackStatusProcessing, TrackStatusReady, TrackStatusFailed:
+		return true
+	default:
+		return false
+	}
+}
+
+type Track struct {
+	ID         uuid.UUID
+	ArtistID   uuid.UUID
+	AlbumID    *uuid.UUID
+	Title      string
+	Duration   time.Duration
+	CoverKey   string
+	FileKey    string
+	PreviewKey string
+	Status     TrackStatus
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+}
+
+func NewTrack(artistID uuid.UUID, title string) (*Track, error) {
+	now := time.Now().UTC()
+	t := &Track{
+		ArtistID:  artistID,
+		Title:     strings.TrimSpace(title),
+		Status:    TrackStatusDraft,
+		CreatedAt: now,
+		UpdatedAt: now,
+	}
+
+	if err := t.Validate(); err != nil {
+		return nil, fmt.Errorf("%w: %w", ErrInvalidInput, err)
+	}
+
+	return t, nil
+}
+
+func RestoreTrack(
+	id, artistID uuid.UUID,
+	albumID *uuid.UUID,
+	title string,
+	duration time.Duration,
+	coverKey, fileKey, previewKey string,
+	status TrackStatus,
+	createdAt, updatedAt time.Time,
+) *Track {
+	return &Track{
+		ID:         id,
+		ArtistID:   artistID,
+		AlbumID:    albumID,
+		Title:      title,
+		Duration:   duration,
+		CoverKey:   coverKey,
+		FileKey:    fileKey,
+		PreviewKey: previewKey,
+		Status:     status,
+		CreatedAt:  createdAt,
+		UpdatedAt:  updatedAt,
+	}
+}
+
+func (t *Track) SetAlbum(albumID *uuid.UUID) {
+	t.AlbumID = albumID
+	t.UpdatedAt = time.Now().UTC()
+}
+
+func (t *Track) SetReady(coverKey, fileKey, previewKey string, duration time.Duration) error {
+	t.CoverKey = coverKey
+	t.FileKey = fileKey
+	t.PreviewKey = previewKey
+	t.Duration = duration
+
+	return t.Validate()
+}
+
+func (t *Track) Validate() error {
+	if t.ArtistID == uuid.Nil {
+		return fmt.Errorf("artist ID cannot be empty")
+	}
+
+	trimmedTitle := strings.TrimSpace(t.Title)
+	if trimmedTitle == "" {
+		return fmt.Errorf("track title cannot be empty")
+	}
+	if len(trimmedTitle) > 255 {
+		return fmt.Errorf("track title exceeds maximum length of 255 characters")
+	}
+
+	if t.Duration < 0 {
+		return fmt.Errorf("track duration cannot be negative")
+	}
+
+	if !t.Status.IsValid() {
+		return fmt.Errorf("invalid track status: %s", t.Status)
+	}
+
+	if t.Status == TrackStatusReady {
+		if t.FileKey == "" {
+			return fmt.Errorf("ready track must have a file key")
+		}
+		if t.Duration == 0 {
+			return fmt.Errorf("ready track must have duration greater than 0")
+		}
+	}
+
+	return nil
+}
