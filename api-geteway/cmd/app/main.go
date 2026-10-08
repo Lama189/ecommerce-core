@@ -10,12 +10,12 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/Lama189/ecommerce-core/api-geteway/internal/client"
-	userClient "github.com/Lama189/ecommerce-core/api-geteway/internal/client/user"
-	"github.com/Lama189/ecommerce-core/api-geteway/internal/config"
-	deliveryHttp "github.com/Lama189/ecommerce-core/api-geteway/internal/delivery/http"
-	"github.com/Lama189/ecommerce-core/api-geteway/internal/infrastructure/jwt"
-	"github.com/Lama189/ecommerce-core/api-geteway/internal/infrastructure/logger"
+	"github.com/Lama189/soundwave-platform/api-geteway/internal/client"
+	userClient "github.com/Lama189/soundwave-platform/api-geteway/internal/client/user"
+	"github.com/Lama189/soundwave-platform/api-geteway/internal/config"
+	deliveryHttp "github.com/Lama189/soundwave-platform/api-geteway/internal/delivery/http"
+	"github.com/Lama189/soundwave-platform/api-geteway/internal/infrastructure/jwt"
+	"github.com/Lama189/soundwave-platform/api-geteway/internal/infrastructure/logger"
 )
 
 func main() {

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/Lama189/ecommerce-core/user-service/migrations"
+	"github.com/Lama189/soundwave-platform/user-service/migrations"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/jackc/pgx/v5/stdlib"
 	"github.com/pressly/goose/v3"

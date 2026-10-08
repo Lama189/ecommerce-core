@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 
-	userpb "github.com/Lama189/ecommerce-core/gen/go/user/v1"
-	"github.com/Lama189/ecommerce-core/user-service/internal/domain"
-	"github.com/Lama189/ecommerce-core/user-service/internal/service/user"
+	userpb "github.com/Lama189/soundwave-platform/gen/go/user/v1"
+	"github.com/Lama189/soundwave-platform/user-service/internal/domain"
+	"github.com/Lama189/soundwave-platform/user-service/internal/service/user"
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

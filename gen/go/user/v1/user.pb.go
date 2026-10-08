@@ -509,7 +509,7 @@ const file_user_v1_user_proto_rawDesc = "" +
 	"\bRegister\x12\x18.user.v1.RegisterRequest\x1a\x19.user.v1.RegisterResponse\x126\n" +
 	"\x05Login\x12\x15.user.v1.LoginRequest\x1a\x16.user.v1.LoginResponse\x12<\n" +
 	"\aRefresh\x12\x17.user.v1.RefreshRequest\x1a\x18.user.v1.RefreshResponse\x12<\n" +
-	"\aGetUser\x12\x17.user.v1.GetUserRequest\x1a\x18.user.v1.GetUserResponseB9Z7github.com/Lama189/ecommerce-core/gen/go/user/v1;userpbb\x06proto3"
+	"\aGetUser\x12\x17.user.v1.GetUserRequest\x1a\x18.user.v1.GetUserResponseB=Z;github.com/Lama189/soundwave-platform/gen/go/user/v1;userpbb\x06proto3"
 
 var (
 	file_user_v1_user_proto_rawDescOnce sync.Once

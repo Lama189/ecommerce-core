@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Lama189/ecommerce-core/api-geteway/internal/delivery/http"
-	userpb "github.com/Lama189/ecommerce-core/gen/go/user/v1"
+	"github.com/Lama189/soundwave-platform/api-geteway/internal/delivery/http"
+	userpb "github.com/Lama189/soundwave-platform/gen/go/user/v1"
 	"github.com/google/uuid"
 	"google.golang.org/grpc"
 )

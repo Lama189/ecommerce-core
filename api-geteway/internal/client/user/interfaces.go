@@ -5,7 +5,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/Lama189/ecommerce-core/api-geteway/internal/delivery/http"
+	"github.com/Lama189/soundwave-platform/api-geteway/internal/delivery/http"
 )
 
 type Client interface {

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package user.v1;
 
-option go_package = "github.com/Lama189/ecommerce-core/gen/go/user/v1;userpb";
+option go_package = "github.com/Lama189/soundwave-platform/gen/go/user/v1;userpb";
 
 import "google/protobuf/timestamp.proto";
 

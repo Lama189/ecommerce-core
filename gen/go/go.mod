@@ -1,4 +1,4 @@
-module github.com/Lama189/ecommerce-core/gen/go
+module github.com/Lama189/soundwave-platform/gen/go
 
 go 1.26.5
 

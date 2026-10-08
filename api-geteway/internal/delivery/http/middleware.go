@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/Lama189/ecommerce-core/api-geteway/internal/infrastructure/jwt"
+	"github.com/Lama189/soundwave-platform/api-geteway/internal/infrastructure/jwt"
 	"github.com/google/uuid"
 )
 

@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "User Service",
-    "description": "Postman-коллекция для тестирования сервиса пользователей ecommerce-core",
+    "description": "Postman-коллекция для тестирования сервиса пользователей soundwave-platform",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [

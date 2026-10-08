@@ -3,7 +3,7 @@ package v1
 import (
 	"context"
 
-	"github.com/Lama189/ecommerce-core/user-service/internal/service/user"
+	"github.com/Lama189/soundwave-platform/user-service/internal/service/user"
 	"github.com/google/uuid"
 )
 

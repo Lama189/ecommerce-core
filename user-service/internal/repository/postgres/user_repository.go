@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Lama189/ecommerce-core/user-service/internal/domain"
+	"github.com/Lama189/soundwave-platform/user-service/internal/domain"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgxpool"
 )

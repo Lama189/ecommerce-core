@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Lama189/ecommerce-core/user-service/internal/service/user"
+	"github.com/Lama189/soundwave-platform/user-service/internal/service/user"
 	"github.com/golang-jwt/jwt/v5"
 )
 

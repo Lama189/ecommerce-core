@@ -8,14 +8,14 @@ import (
 	"os/signal"
 	"syscall"
 
-	userpb "github.com/Lama189/ecommerce-core/gen/go/user/v1"
-	"github.com/Lama189/ecommerce-core/user-service/internal/config"
-	deliveryGrpc "github.com/Lama189/ecommerce-core/user-service/internal/delivery/grpc/v1"
-	"github.com/Lama189/ecommerce-core/user-service/internal/infrastructure/hasher"
-	"github.com/Lama189/ecommerce-core/user-service/internal/infrastructure/jwt"
-	"github.com/Lama189/ecommerce-core/user-service/internal/repository/postgres"
-	"github.com/Lama189/ecommerce-core/user-service/internal/repository/redis"
-	"github.com/Lama189/ecommerce-core/user-service/internal/service/user"
+	userpb "github.com/Lama189/soundwave-platform/gen/go/user/v1"
+	"github.com/Lama189/soundwave-platform/user-service/internal/config"
+	deliveryGrpc "github.com/Lama189/soundwave-platform/user-service/internal/delivery/grpc/v1"
+	"github.com/Lama189/soundwave-platform/user-service/internal/infrastructure/hasher"
+	"github.com/Lama189/soundwave-platform/user-service/internal/infrastructure/jwt"
+	"github.com/Lama189/soundwave-platform/user-service/internal/repository/postgres"
+	"github.com/Lama189/soundwave-platform/user-service/internal/repository/redis"
+	"github.com/Lama189/soundwave-platform/user-service/internal/service/user"
 	"google.golang.org/grpc"
 )
 

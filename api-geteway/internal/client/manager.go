@@ -13,7 +13,7 @@ import (
 	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/metadata"
 
-	"github.com/Lama189/ecommerce-core/api-geteway/internal/delivery/http"
+	"github.com/Lama189/soundwave-platform/api-geteway/internal/delivery/http"
 )
 
 type Config struct {
