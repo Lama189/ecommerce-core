@@ -29,9 +29,10 @@ var (
 
 // Track errors
 var (
-	ErrTrackNotFound        = fmt.Errorf("%w: track not found", ErrNotFound)
-	ErrTrackNotReady        = fmt.Errorf("%w: track is not ready yet", ErrInvalidInput)
-	ErrInvalidAudioDuration = fmt.Errorf("%w: duration must be positive", ErrInvalidInput)
+	ErrTrackNotFound          = fmt.Errorf("%w: track not found", ErrNotFound)
+	ErrTrackNotReady          = fmt.Errorf("%w: track is not ready yet", ErrInvalidInput)
+	ErrInvalidAudioDuration   = fmt.Errorf("%w: duration must be positive", ErrInvalidInput)
+	ErrInvalidStateTransition = fmt.Errorf("%w: invalid state transition", ErrConflict)
 )
 
 // Playlist errors

@@ -65,6 +65,15 @@ func (p *Playlist) Validate() error {
 	return nil
 }
 
+func (p *Playlist) Update(title, description string, isPrivate bool) error {
+	p.Title = strings.TrimSpace(title)
+	p.Description = strings.TrimSpace(description)
+	p.IsPrivate = isPrivate
+
+	return p.Validate()
+}
+
+
 type PlaylistTrack struct {
 	PlaylistID uuid.UUID
 	TrackID    uuid.UUID

@@ -33,7 +33,7 @@ func (s *Service) Create(ctx context.Context, dto CreateUserDTO) (*UserOutputDTO
 
 	newUser, err := domain.NewUser(dto.Phone, passwordHash)
 	if err != nil {
-		return nil, fmt.Errorf("create User: %w", err)
+		return nil, fmt.Errorf("create user: %w", err)
 	}
 
 	if err := s.repo.Create(ctx, newUser); err != nil {

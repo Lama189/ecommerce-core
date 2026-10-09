@@ -21,6 +21,7 @@ type TrackRepository interface {
 
 type ArtistRepository interface {
 	GetByID(ctx context.Context, id uuid.UUID) (*domain.Artist, error)
+	GetByUserID(ctx context.Context, userID uuid.UUID) (*domain.Artist, error)
 }
 
 type AlbumRepository interface {
@@ -35,6 +36,6 @@ type TrackLikeRepository interface {
 	CountByTrackID(ctx context.Context, trackID uuid.UUID) (int64, error)
 }
 
-type StorageManager interface {
+type Storage interface {
 	GenerateUploadURL(ctx context.Context, key string) (string, error)
 }

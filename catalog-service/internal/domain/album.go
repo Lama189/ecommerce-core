@@ -75,3 +75,14 @@ func (a *Album) Validate() error {
 
 	return nil
 }
+
+func (a *Album) Update(title, description, coverKey string) error {
+	a.Title = strings.TrimSpace(title)
+	a.Description = strings.TrimSpace(description)
+	if trimmedCoverKey := strings.TrimSpace(coverKey); trimmedCoverKey != "" {
+		a.CoverKey = trimmedCoverKey
+	}
+	a.UpdatedAt = time.Now().UTC()
+
+	return a.Validate()
+}

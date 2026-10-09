@@ -67,7 +67,7 @@ func toOutputDTO(t *domain.Track) *TrackOutputDTO {
 
 func toOutputDTOList(tracks []*domain.Track) []*TrackOutputDTO {
 	if tracks == nil {
-		return nil
+		return []*TrackOutputDTO{}
 	}
 
 	list := make([]*TrackOutputDTO, 0, len(tracks))

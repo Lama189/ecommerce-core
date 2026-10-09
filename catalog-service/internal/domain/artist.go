@@ -64,3 +64,11 @@ func (a *Artist) Validate() error {
 
 	return nil
 }
+
+func (a *Artist) Update(name, bio string) error {
+	a.Name = strings.TrimSpace(name)
+	a.Bio = strings.TrimSpace(bio)
+	a.UpdatedAt = time.Now().UTC()
+
+	return a.Validate()
+}

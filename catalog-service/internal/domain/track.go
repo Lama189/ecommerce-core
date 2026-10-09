@@ -86,11 +86,51 @@ func (t *Track) SetAlbum(albumID *uuid.UUID) {
 	t.UpdatedAt = time.Now().UTC()
 }
 
-func (t *Track) SetReady(coverKey, fileKey, previewKey string, duration time.Duration) error {
-	t.CoverKey = coverKey
+func (t *Track) MarkAsReady(coverKey, fileKey, previewKey string, duration time.Duration) error {
+	if t.Status != TrackStatusProcessing && t.Status != TrackStatusDraft {
+		return fmt.Errorf("%w: cannot transition from %s to ready", ErrInvalidStateTransition, t.Status)
+	}
+
+	t.Status = TrackStatusReady
 	t.FileKey = fileKey
 	t.PreviewKey = previewKey
 	t.Duration = duration
+
+	if strings.TrimSpace(coverKey) != "" {
+		t.CoverKey = strings.TrimSpace(coverKey)
+	}
+
+	t.UpdatedAt = time.Now().UTC()
+
+	if err := t.Validate(); err != nil {
+		return fmt.Errorf("%w: %w", ErrInvalidInput, err)
+	}
+
+	return nil
+}
+
+func (t *Track) MarkAsFailed() error {
+	if t.Status == TrackStatusReady {
+		return fmt.Errorf("%w: cannot fail track that is already ready", ErrInvalidStateTransition)
+	}
+
+	if t.Status == TrackStatusFailed {
+		return nil
+	}
+
+	t.Status = TrackStatusFailed
+	t.UpdatedAt = time.Now().UTC()
+
+	return nil
+}
+
+func (t *Track) Update(title string, albumID *uuid.UUID, coverKey string) error {
+	t.Title = strings.TrimSpace(title)
+	t.AlbumID = albumID
+	if trimmedCoverKey := strings.TrimSpace(coverKey); trimmedCoverKey != "" {
+		t.CoverKey = trimmedCoverKey
+	}
+	t.UpdatedAt = time.Now().UTC()
 
 	return t.Validate()
 }
