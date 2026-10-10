@@ -126,7 +126,6 @@ func (r *UserRepository) Delete(ctx context.Context, id uuid.UUID) error {
 	`
 
 	cmdTag, err := r.pool.Exec(ctx, query, id)
-
 	if err != nil {
 		return fmt.Errorf("delete user: %w", err)
 	}
