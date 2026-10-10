@@ -21,17 +21,18 @@ func NewTrackRepository(pool *pgxpool.Pool) *TrackRepository {
 func (r *TrackRepository) Create(ctx context.Context, track *domain.Track) error {
 	const query = `
 		INSERT INTO tracks (
-			artist_id, album_id, title, duration_seconds,
-			cover_key, file_key, preview_key, status,
+			id, artist_id, album_id, title, duration_seconds,
+			cover_key, file_key, preview_key, raw_key, status,
 			created_at, updated_at
 		)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
 		RETURNING id;
 	`
 
 	err := r.pool.QueryRow(
 		ctx,
 		query,
+		track.ID,
 		track.ArtistID,
 		track.AlbumID,
 		track.Title,
@@ -39,6 +40,7 @@ func (r *TrackRepository) Create(ctx context.Context, track *domain.Track) error
 		track.CoverKey,
 		track.FileKey,
 		track.PreviewKey,
+		track.RawKey,
 		string(track.Status),
 		track.CreatedAt,
 		track.UpdatedAt,
@@ -53,7 +55,7 @@ func (r *TrackRepository) Create(ctx context.Context, track *domain.Track) error
 func (r *TrackRepository) GetByID(ctx context.Context, id uuid.UUID) (*domain.Track, error) {
 	const query = `
 		SELECT id, artist_id, album_id, title, duration_seconds,
-		       cover_key, file_key, preview_key, status, created_at, updated_at
+		       cover_key, file_key, preview_key, raw_key, status, created_at, updated_at
 		FROM tracks
 		WHERE id = $1;
 	`
@@ -68,6 +70,7 @@ func (r *TrackRepository) GetByID(ctx context.Context, id uuid.UUID) (*domain.Tr
 		&m.CoverKey,
 		&m.FileKey,
 		&m.PreviewKey,
+		&m.RawKey,
 		&m.Status,
 		&m.CreatedAt,
 		&m.UpdatedAt,
@@ -82,7 +85,7 @@ func (r *TrackRepository) GetByID(ctx context.Context, id uuid.UUID) (*domain.Tr
 func (r *TrackRepository) GetByArtistID(ctx context.Context, artistID uuid.UUID, limit, offset int) ([]*domain.Track, error) {
 	const query = `
 		SELECT id, artist_id, album_id, title, duration_seconds,
-		       cover_key, file_key, preview_key, status, created_at, updated_at
+		       cover_key, file_key, preview_key, raw_key, status, created_at, updated_at
 		FROM tracks
 		WHERE artist_id = $1
 		ORDER BY created_at DESC
@@ -107,6 +110,7 @@ func (r *TrackRepository) GetByArtistID(ctx context.Context, artistID uuid.UUID,
 			&m.CoverKey,
 			&m.FileKey,
 			&m.PreviewKey,
+			&m.RawKey,
 			&m.Status,
 			&m.CreatedAt,
 			&m.UpdatedAt,
@@ -126,7 +130,7 @@ func (r *TrackRepository) GetByArtistID(ctx context.Context, artistID uuid.UUID,
 func (r *TrackRepository) GetByAlbumID(ctx context.Context, albumID uuid.UUID) ([]*domain.Track, error) {
 	const query = `
 		SELECT id, artist_id, album_id, title, duration_seconds,
-		       cover_key, file_key, preview_key, status, created_at, updated_at
+		       cover_key, file_key, preview_key, raw_key, status, created_at, updated_at
 		FROM tracks
 		WHERE album_id = $1
 		ORDER BY created_at ASC;
@@ -150,6 +154,7 @@ func (r *TrackRepository) GetByAlbumID(ctx context.Context, albumID uuid.UUID) (
 			&m.CoverKey,
 			&m.FileKey,
 			&m.PreviewKey,
+			&m.RawKey,
 			&m.Status,
 			&m.CreatedAt,
 			&m.UpdatedAt,
@@ -173,7 +178,7 @@ func (r *TrackRepository) GetByIDs(ctx context.Context, ids []uuid.UUID) ([]*dom
 
 	const query = `
 		SELECT id, artist_id, album_id, title, duration_seconds,
-		       cover_key, file_key, preview_key, status, created_at, updated_at
+		       cover_key, file_key, preview_key, raw_key, status, created_at, updated_at
 		FROM tracks
 		WHERE id = ANY($1);
 	`
@@ -196,6 +201,7 @@ func (r *TrackRepository) GetByIDs(ctx context.Context, ids []uuid.UUID) ([]*dom
 			&m.CoverKey,
 			&m.FileKey,
 			&m.PreviewKey,
+			&m.RawKey,
 			&m.Status,
 			&m.CreatedAt,
 			&m.UpdatedAt,

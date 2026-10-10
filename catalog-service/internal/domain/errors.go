@@ -33,6 +33,7 @@ var (
 	ErrTrackNotReady          = fmt.Errorf("%w: track is not ready yet", ErrInvalidInput)
 	ErrInvalidAudioDuration   = fmt.Errorf("%w: duration must be positive", ErrInvalidInput)
 	ErrInvalidStateTransition = fmt.Errorf("%w: invalid state transition", ErrConflict)
+	ErrUnsupportedAudioFormat = fmt.Errorf("%w: unsupported audio format", ErrInvalidInput)
 )
 
 // Playlist errors

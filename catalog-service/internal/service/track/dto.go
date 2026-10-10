@@ -11,6 +11,7 @@ type UploadTrackDTO struct {
 	ArtistID uuid.UUID
 	AlbumID  *uuid.UUID
 	Title    string
+	FileName string
 }
 
 type CompleteProcessingDTO struct {
@@ -35,6 +36,7 @@ type TrackOutputDTO struct {
 	CoverKey   string
 	FileKey    string
 	PreviewKey string
+	RawKey     string
 	Status     string
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
@@ -59,6 +61,7 @@ func toOutputDTO(t *domain.Track) *TrackOutputDTO {
 		CoverKey:   t.CoverKey,
 		FileKey:    t.FileKey,
 		PreviewKey: t.PreviewKey,
+		RawKey:     t.RawKey,
 		Status:     string(t.Status),
 		CreatedAt:  t.CreatedAt,
 		UpdatedAt:  t.UpdatedAt,

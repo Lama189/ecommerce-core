@@ -26,6 +26,20 @@ func (s TrackStatus) IsValid() bool {
 	}
 }
 
+var AllowedAudioExtensions = map[string]struct{}{
+	".wav":  {},
+	".mp3":  {},
+	".flac": {},
+	".ogg":  {},
+	".aac":  {},
+	".m4a":  {},
+}
+
+func IsSupportedAudioExtension(ext string) bool {
+	_, ok := AllowedAudioExtensions[strings.ToLower(ext)]
+	return ok
+}
+
 type Track struct {
 	ID         uuid.UUID
 	ArtistID   uuid.UUID
@@ -35,6 +49,7 @@ type Track struct {
 	CoverKey   string
 	FileKey    string
 	PreviewKey string
+	RawKey     string
 	Status     TrackStatus
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
@@ -43,6 +58,7 @@ type Track struct {
 func NewTrack(artistID uuid.UUID, title string) (*Track, error) {
 	now := time.Now().UTC()
 	t := &Track{
+		ID:        uuid.New(),
 		ArtistID:  artistID,
 		Title:     strings.TrimSpace(title),
 		Status:    TrackStatusDraft,
@@ -62,7 +78,7 @@ func RestoreTrack(
 	albumID *uuid.UUID,
 	title string,
 	duration time.Duration,
-	coverKey, fileKey, previewKey string,
+	coverKey, fileKey, previewKey, rawKey string,
 	status TrackStatus,
 	createdAt, updatedAt time.Time,
 ) *Track {
@@ -75,10 +91,16 @@ func RestoreTrack(
 		CoverKey:   coverKey,
 		FileKey:    fileKey,
 		PreviewKey: previewKey,
+		RawKey:     rawKey,
 		Status:     status,
 		CreatedAt:  createdAt,
 		UpdatedAt:  updatedAt,
 	}
+}
+
+func (t *Track) SetRawKey(rawKey string) {
+	t.RawKey = strings.TrimSpace(rawKey)
+	t.UpdatedAt = time.Now().UTC()
 }
 
 func (t *Track) SetAlbum(albumID *uuid.UUID) {
@@ -163,6 +185,10 @@ func (t *Track) Validate() error {
 		if t.Duration == 0 {
 			return fmt.Errorf("ready track must have duration greater than 0")
 		}
+	}
+
+	if len(t.RawKey) > 512 {
+		return fmt.Errorf("track raw key exceeds maximum length of 512 characters")
 	}
 
 	return nil

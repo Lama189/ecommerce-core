@@ -58,6 +58,7 @@ type trackModel struct {
 	CoverKey        string     `db:"cover_key"`
 	FileKey         string     `db:"file_key"`
 	PreviewKey      string     `db:"preview_key"`
+	RawKey          string     `db:"raw_key"`
 	Status          string     `db:"status"`
 	CreatedAt       time.Time  `db:"created_at"`
 	UpdatedAt       time.Time  `db:"updated_at"`
@@ -73,6 +74,7 @@ func (m *trackModel) toDomain() *domain.Track {
 		m.CoverKey,
 		m.FileKey,
 		m.PreviewKey,
+		m.RawKey,
 		domain.TrackStatus(m.Status),
 		m.CreatedAt,
 		m.UpdatedAt,

@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"path/filepath"
+	"strings"
 
 	"github.com/Lama189/soundwave-platform/catalog-service/internal/domain"
 	"github.com/google/uuid"
@@ -141,6 +143,11 @@ func (s *Service) UploadTrack(ctx context.Context, currentUserID uuid.UUID, dto 
 		albumID = dto.AlbumID
 	}
 
+	ext := strings.ToLower(filepath.Ext(dto.FileName))
+	if !domain.IsSupportedAudioExtension(ext) {
+		return nil, domain.ErrUnsupportedAudioFormat
+	}
+
 	newTrack, err := domain.NewTrack(artist.ID, dto.Title)
 	if err != nil {
 		return nil, fmt.Errorf("create track draft: %w", err)
@@ -150,11 +157,13 @@ func (s *Service) UploadTrack(ctx context.Context, currentUserID uuid.UUID, dto 
 		newTrack.SetAlbum(albumID)
 	}
 
+	rawKey := fmt.Sprintf("raw/audio/%s%s", newTrack.ID, ext)
+	newTrack.SetRawKey(rawKey)
+
 	if err := s.tracks.Create(ctx, newTrack); err != nil {
 		return nil, fmt.Errorf("save track draft: %w", err)
 	}
 
-	rawKey := fmt.Sprintf("raw/audio/%s.wav", newTrack.ID)
 	uploadURL, err := s.storage.GenerateUploadURL(ctx, rawKey)
 	if err != nil {
 		return nil, fmt.Errorf("generate upload url for track %s: %w", newTrack.ID, err)

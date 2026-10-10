@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS tracks (
     cover_key VARCHAR(512) NOT NULL DEFAULT '',
     file_key VARCHAR(512) NOT NULL DEFAULT '',
     preview_key VARCHAR(512) NOT NULL DEFAULT '',
+    raw_key VARCHAR(512) NOT NULL DEFAULT '',
     status track_status NOT NULL DEFAULT 'draft',
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
