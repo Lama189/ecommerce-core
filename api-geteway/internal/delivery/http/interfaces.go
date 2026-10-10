@@ -3,12 +3,23 @@ package http
 import (
 	"context"
 
+	"github.com/Lama189/soundwave-platform/api-geteway/internal/grpcclient"
+	usecaseArtist "github.com/Lama189/soundwave-platform/api-geteway/internal/usecase/artist"
 	"github.com/google/uuid"
 )
 
 type UserClient interface {
-	Register(ctx context.Context, req RegisterRequest) (*UserResponse, error)
-	Login(ctx context.Context, req LoginRequest) (*AuthResponse, error)
-	Refresh(ctx context.Context, req RefreshRequest) (*RefreshResponse, error)
-	GetMe(ctx context.Context, userID uuid.UUID) (*UserResponse, error)
+	Register(ctx context.Context, req grpcclient.RegisterRequest) (*grpcclient.UserResponse, error)
+	Login(ctx context.Context, req grpcclient.LoginRequest) (*grpcclient.AuthResponse, error)
+	Refresh(ctx context.Context, req grpcclient.RefreshRequest) (*grpcclient.RefreshResponse, error)
+	GetMe(ctx context.Context, userID uuid.UUID) (*grpcclient.UserResponse, error)
+}
+
+type ArtistClient interface {
+	GetArtist(ctx context.Context, artistID uuid.UUID) (*grpcclient.ArtistResponse, error)
+	GetArtistByUserId(ctx context.Context, userID uuid.UUID) (*grpcclient.ArtistResponse, error)
+}
+
+type BecomeArtistUseCase interface {
+	Execute(ctx context.Context, input usecaseArtist.BecomeArtistInput) (*grpcclient.ArtistResponse, error)
 }

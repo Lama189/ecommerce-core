@@ -101,6 +101,24 @@ func (s *ArtistGRPCServer) UpdateArtist(ctx context.Context, req *catalogpb.Upda
 	}, nil
 }
 
+func (s *ArtistGRPCServer) DeleteArtist(ctx context.Context, req *catalogpb.DeleteArtistRequest) (*catalogpb.DeleteArtistResponse, error) {
+	artistID, err := uuid.Parse(req.GetId())
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid artist id format")
+	}
+
+	userID, err := uuid.Parse(req.GetUserId())
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid user id format")
+	}
+
+	if err := s.service.Delete(ctx, userID, artistID); err != nil {
+		return nil, mapDomainError(err)
+	}
+
+	return &catalogpb.DeleteArtistResponse{}, nil
+}
+
 func toProtoArtist(a *artist.ArtistOutputDTO) *catalogpb.Artist {
 	if a == nil {
 		return nil

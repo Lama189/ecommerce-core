@@ -1,42 +1,41 @@
-package user
+package grpcclient
 
 import (
 	"context"
 	"fmt"
 	"time"
 
-	"github.com/Lama189/soundwave-platform/api-geteway/internal/delivery/http"
 	userpb "github.com/Lama189/soundwave-platform/gen/go/user/v1"
 	"github.com/google/uuid"
 	"google.golang.org/grpc"
 )
 
-type client struct {
+type UserClient struct {
 	grpcClient userpb.UserServiceClient
 	timeout    time.Duration
 }
 
-func NewClient(conn grpc.ClientConnInterface, defaultTimeout time.Duration) Client {
+func NewUserClient(conn grpc.ClientConnInterface, defaultTimeout time.Duration) *UserClient {
 	if defaultTimeout <= 0 {
 		defaultTimeout = 5 * time.Second
 	}
 
-	return &client{
+	return &UserClient{
 		grpcClient: userpb.NewUserServiceClient(conn),
 		timeout:    defaultTimeout,
 	}
 }
 
-func (c *client) Register(ctx context.Context, req http.RegisterRequest) (*http.UserResponse, error) {
+func (c *UserClient) Register(ctx context.Context, req RegisterRequest) (*UserResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, c.timeout)
 	defer cancel()
 
-	pdReq := &userpb.RegisterRequest{
+	pbReq := &userpb.RegisterRequest{
 		Phone:    req.Phone,
 		Password: req.Password,
 	}
 
-	pbRes, err := c.grpcClient.Register(ctx, pdReq)
+	pbRes, err := c.grpcClient.Register(ctx, pbReq)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +45,7 @@ func (c *client) Register(ctx context.Context, req http.RegisterRequest) (*http.
 		return nil, fmt.Errorf("invalid user id returned from gRPC: %w", err)
 	}
 
-	return &http.UserResponse{
+	return &UserResponse{
 		ID:        userID,
 		Phone:     pbRes.GetUser().GetPhone(),
 		Role:      pbRes.GetUser().GetRole(),
@@ -54,7 +53,7 @@ func (c *client) Register(ctx context.Context, req http.RegisterRequest) (*http.
 	}, nil
 }
 
-func (c *client) Login(ctx context.Context, req http.LoginRequest) (*http.AuthResponse, error) {
+func (c *UserClient) Login(ctx context.Context, req LoginRequest) (*AuthResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, c.timeout)
 	defer cancel()
 
@@ -73,8 +72,8 @@ func (c *client) Login(ctx context.Context, req http.LoginRequest) (*http.AuthRe
 		return nil, fmt.Errorf("invalid user id returned from gRPC: %w", err)
 	}
 
-	return &http.AuthResponse{
-		User: http.UserResponse{
+	return &AuthResponse{
+		User: UserResponse{
 			ID:        userID,
 			Phone:     pbRes.GetUser().GetPhone(),
 			Role:      pbRes.GetUser().GetRole(),
@@ -85,7 +84,7 @@ func (c *client) Login(ctx context.Context, req http.LoginRequest) (*http.AuthRe
 	}, nil
 }
 
-func (c *client) Refresh(ctx context.Context, req http.RefreshRequest) (*http.RefreshResponse, error) {
+func (c *UserClient) Refresh(ctx context.Context, req RefreshRequest) (*RefreshResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, c.timeout)
 	defer cancel()
 
@@ -98,13 +97,13 @@ func (c *client) Refresh(ctx context.Context, req http.RefreshRequest) (*http.Re
 		return nil, err
 	}
 
-	return &http.RefreshResponse{
+	return &RefreshResponse{
 		AccessToken:  pbRes.GetAccessToken(),
 		RefreshToken: pbRes.GetRefreshToken(),
 	}, nil
 }
 
-func (c *client) GetMe(ctx context.Context, userID uuid.UUID) (*http.UserResponse, error) {
+func (c *UserClient) GetMe(ctx context.Context, userID uuid.UUID) (*UserResponse, error) {
 	ctx, cancel := context.WithTimeout(ctx, c.timeout)
 	defer cancel()
 
@@ -122,7 +121,34 @@ func (c *client) GetMe(ctx context.Context, userID uuid.UUID) (*http.UserRespons
 		return nil, fmt.Errorf("invalid user id returned from gRPC: %w", err)
 	}
 
-	return &http.UserResponse{
+	return &UserResponse{
+		ID:        parsedID,
+		Phone:     pbRes.GetUser().GetPhone(),
+		Role:      pbRes.GetUser().GetRole(),
+		CreatedAt: pbRes.GetUser().GetCreatedAt().AsTime(),
+	}, nil
+}
+
+func (c *UserClient) UpdateUserRole(ctx context.Context, userID uuid.UUID, role string) (*UserResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, c.timeout)
+	defer cancel()
+
+	pbReq := &userpb.UpdateUserRoleRequest{
+		UserId: userID.String(),
+		Role:   role,
+	}
+
+	pbRes, err := c.grpcClient.UpdateUserRole(ctx, pbReq)
+	if err != nil {
+		return nil, err
+	}
+
+	parsedID, err := uuid.Parse(pbRes.GetUser().GetId())
+	if err != nil {
+		return nil, fmt.Errorf("invalid user id returned from gRPC: %w", err)
+	}
+
+	return &UserResponse{
 		ID:        parsedID,
 		Phone:     pbRes.GetUser().GetPhone(),
 		Role:      pbRes.GetUser().GetRole(),

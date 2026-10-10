@@ -7,14 +7,8 @@ import (
 	"strings"
 
 	"github.com/Lama189/soundwave-platform/api-geteway/internal/infrastructure/jwt"
+	"github.com/Lama189/soundwave-platform/api-geteway/pkg/contextutil"
 	"github.com/google/uuid"
-)
-
-type contextKey string
-
-const (
-	ctxUserIDKey   contextKey = "userID"
-	ctxUserRoleKey contextKey = "userRole"
 )
 
 func AuthMiddleware(validator jwt.TokenValidator) func(http.Handler) http.Handler {
@@ -43,8 +37,8 @@ func AuthMiddleware(validator jwt.TokenValidator) func(http.Handler) http.Handle
 				return
 			}
 
-			ctx := context.WithValue(r.Context(), ctxUserIDKey, claims.UserID)
-			ctx = context.WithValue(ctx, ctxUserRoleKey, claims.Role)
+			ctx := contextutil.WithUserID(r.Context(), claims.UserID)
+			ctx = contextutil.WithUserRole(ctx, claims.Role)
 
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})
@@ -52,11 +46,9 @@ func AuthMiddleware(validator jwt.TokenValidator) func(http.Handler) http.Handle
 }
 
 func UserIDFromContext(ctx context.Context) (uuid.UUID, bool) {
-	id, ok := ctx.Value(ctxUserIDKey).(uuid.UUID)
-	return id, ok
+	return contextutil.UserIDFromContext(ctx)
 }
 
 func UserRoleFromContext(ctx context.Context) (string, bool) {
-	role, ok := ctx.Value(ctxUserRoleKey).(string)
-	return role, ok
+	return contextutil.UserRoleFromContext(ctx)
 }

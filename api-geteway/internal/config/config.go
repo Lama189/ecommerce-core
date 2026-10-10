@@ -27,12 +27,18 @@ type JWTConfig struct {
 }
 
 type ServicesConfig struct {
-	User UserServiceConfig
+	User    UserServiceConfig
+	Catalog CatalogServiceConfig
 }
 
 type UserServiceConfig struct {
 	Addr    string        `env:"USER_SERVICE_GRPC_ADDR" env-default:"localhost:50051"`
 	Timeout time.Duration `env:"USER_SERVICE_TIMEOUT" env-default:"5s"`
+}
+
+type CatalogServiceConfig struct {
+	Addr    string        `env:"CATALOG_SERVICE_GRPC_ADDR" env-default:"localhost:50052"`
+	Timeout time.Duration `env:"CATALOG_SERVICE_TIMEOUT" env-default:"5s"`
 }
 
 func Load() (*Config, error) {

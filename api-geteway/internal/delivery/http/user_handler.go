@@ -3,6 +3,8 @@ package http
 import (
 	"encoding/json"
 	"net/http"
+
+	"github.com/Lama189/soundwave-platform/api-geteway/internal/grpcclient"
 )
 
 type UserHandler struct {
@@ -14,7 +16,7 @@ func NewUserHandler(client UserClient) *UserHandler {
 }
 
 func (h *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
-	var req RegisterRequest
+	var req grpcclient.RegisterRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		SendError(w, http.StatusBadRequest, "invalid request body")
 		return
@@ -30,7 +32,7 @@ func (h *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
-	var req LoginRequest
+	var req grpcclient.LoginRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		SendError(w, http.StatusBadRequest, "invalid request body")
 		return
@@ -46,7 +48,7 @@ func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *UserHandler) Refresh(w http.ResponseWriter, r *http.Request) {
-	var req RefreshRequest
+	var req grpcclient.RefreshRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		SendError(w, http.StatusBadRequest, "invalid request body")
 		return

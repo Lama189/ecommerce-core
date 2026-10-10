@@ -8,7 +8,11 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
-func NewRouter(handler *UserHandler, tokenValidator jwt.TokenValidator) *chi.Mux {
+func NewRouter(
+	userHandler *UserHandler,
+	artistHandler *ArtistHandler,
+	tokenValidator jwt.TokenValidator,
+) *chi.Mux {
 	r := chi.NewRouter()
 
 	r.Use(middleware.RequestID)
@@ -22,14 +26,24 @@ func NewRouter(handler *UserHandler, tokenValidator jwt.TokenValidator) *chi.Mux
 
 	r.Route("/api/v1", func(r chi.Router) {
 		r.Route("/auth", func(r chi.Router) {
-			r.Post("/register", handler.Register)
-			r.Post("/login", handler.Login)
-			r.Post("/refresh", handler.Refresh)
+			r.Post("/register", userHandler.Register)
+			r.Post("/login", userHandler.Login)
+			r.Post("/refresh", userHandler.Refresh)
 		})
 
 		r.Group(func(r chi.Router) {
 			r.Use(AuthMiddleware(tokenValidator))
-			r.Get("/users/me", handler.GetMe)
+			r.Get("/users/me", userHandler.GetMe)
+		})
+
+		r.Route("/artists", func(r chi.Router) {
+			r.Get("/{id}", artistHandler.GetByID)
+
+			r.Group(func(r chi.Router) {
+				r.Use(AuthMiddleware(tokenValidator))
+				r.Post("/become", artistHandler.BecomeArtist)
+				r.Get("/me", artistHandler.GetMe)
+			})
 		})
 	})
 

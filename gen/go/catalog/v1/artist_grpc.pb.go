@@ -23,6 +23,7 @@ const (
 	ArtistService_GetArtist_FullMethodName         = "/catalog.v1.ArtistService/GetArtist"
 	ArtistService_GetArtistByUserId_FullMethodName = "/catalog.v1.ArtistService/GetArtistByUserId"
 	ArtistService_UpdateArtist_FullMethodName      = "/catalog.v1.ArtistService/UpdateArtist"
+	ArtistService_DeleteArtist_FullMethodName      = "/catalog.v1.ArtistService/DeleteArtist"
 )
 
 // ArtistServiceClient is the client API for ArtistService service.
@@ -33,6 +34,7 @@ type ArtistServiceClient interface {
 	GetArtist(ctx context.Context, in *GetArtistRequest, opts ...grpc.CallOption) (*GetArtistResponse, error)
 	GetArtistByUserId(ctx context.Context, in *GetArtistByUserIdRequest, opts ...grpc.CallOption) (*GetArtistByUserIdResponse, error)
 	UpdateArtist(ctx context.Context, in *UpdateArtistRequest, opts ...grpc.CallOption) (*UpdateArtistResponse, error)
+	DeleteArtist(ctx context.Context, in *DeleteArtistRequest, opts ...grpc.CallOption) (*DeleteArtistResponse, error)
 }
 
 type artistServiceClient struct {
@@ -83,6 +85,16 @@ func (c *artistServiceClient) UpdateArtist(ctx context.Context, in *UpdateArtist
 	return out, nil
 }
 
+func (c *artistServiceClient) DeleteArtist(ctx context.Context, in *DeleteArtistRequest, opts ...grpc.CallOption) (*DeleteArtistResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteArtistResponse)
+	err := c.cc.Invoke(ctx, ArtistService_DeleteArtist_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ArtistServiceServer is the server API for ArtistService service.
 // All implementations must embed UnimplementedArtistServiceServer
 // for forward compatibility.
@@ -91,6 +103,7 @@ type ArtistServiceServer interface {
 	GetArtist(context.Context, *GetArtistRequest) (*GetArtistResponse, error)
 	GetArtistByUserId(context.Context, *GetArtistByUserIdRequest) (*GetArtistByUserIdResponse, error)
 	UpdateArtist(context.Context, *UpdateArtistRequest) (*UpdateArtistResponse, error)
+	DeleteArtist(context.Context, *DeleteArtistRequest) (*DeleteArtistResponse, error)
 	mustEmbedUnimplementedArtistServiceServer()
 }
 
@@ -112,6 +125,9 @@ func (UnimplementedArtistServiceServer) GetArtistByUserId(context.Context, *GetA
 }
 func (UnimplementedArtistServiceServer) UpdateArtist(context.Context, *UpdateArtistRequest) (*UpdateArtistResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method UpdateArtist not implemented")
+}
+func (UnimplementedArtistServiceServer) DeleteArtist(context.Context, *DeleteArtistRequest) (*DeleteArtistResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteArtist not implemented")
 }
 func (UnimplementedArtistServiceServer) mustEmbedUnimplementedArtistServiceServer() {}
 func (UnimplementedArtistServiceServer) testEmbeddedByValue()                       {}
@@ -206,6 +222,24 @@ func _ArtistService_UpdateArtist_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ArtistService_DeleteArtist_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteArtistRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ArtistServiceServer).DeleteArtist(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ArtistService_DeleteArtist_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ArtistServiceServer).DeleteArtist(ctx, req.(*DeleteArtistRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ArtistService_ServiceDesc is the grpc.ServiceDesc for ArtistService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -228,6 +262,10 @@ var ArtistService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateArtist",
 			Handler:    _ArtistService_UpdateArtist_Handler,
+		},
+		{
+			MethodName: "DeleteArtist",
+			Handler:    _ArtistService_DeleteArtist_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

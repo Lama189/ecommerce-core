@@ -1,4 +1,4 @@
-package client
+package grpcclient
 
 import (
 	"context"
@@ -13,7 +13,7 @@ import (
 	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/metadata"
 
-	"github.com/Lama189/soundwave-platform/api-geteway/internal/delivery/http"
+	"github.com/Lama189/soundwave-platform/api-geteway/pkg/contextutil"
 )
 
 type Config struct {
@@ -115,10 +115,10 @@ func (m *Manager) metadataPropagationInterceptor() grpc.UnaryClientInterceptor {
 			md.Set("x-request-id", reqID)
 		}
 
-		if userID, ok := http.UserIDFromContext(ctx); ok {
+		if userID, ok := contextutil.UserIDFromContext(ctx); ok {
 			md.Set("x-user-id", userID.String())
 		}
-		if role, ok := http.UserRoleFromContext(ctx); ok && role != "" {
+		if role, ok := contextutil.UserRoleFromContext(ctx); ok && role != "" {
 			md.Set("x-user-role", role)
 		}
 

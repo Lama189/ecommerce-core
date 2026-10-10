@@ -11,6 +11,7 @@ service ArtistService {
   rpc GetArtist(GetArtistRequest) returns (GetArtistResponse);
   rpc GetArtistByUserId(GetArtistByUserIdRequest) returns (GetArtistByUserIdResponse);
   rpc UpdateArtist(UpdateArtistRequest) returns (UpdateArtistResponse);
+  rpc DeleteArtist(DeleteArtistRequest) returns (DeleteArtistResponse);
 }
 
 message Artist {
@@ -58,3 +59,10 @@ message UpdateArtistRequest {
 message UpdateArtistResponse {
   Artist artist = 1;
 }
+
+message DeleteArtistRequest {
+  string id = 1;
+  string user_id = 2;
+}
+
+message DeleteArtistResponse {}

@@ -10,12 +10,12 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/Lama189/soundwave-platform/api-geteway/internal/client"
-	userClient "github.com/Lama189/soundwave-platform/api-geteway/internal/client/user"
 	"github.com/Lama189/soundwave-platform/api-geteway/internal/config"
 	deliveryHttp "github.com/Lama189/soundwave-platform/api-geteway/internal/delivery/http"
+	"github.com/Lama189/soundwave-platform/api-geteway/internal/grpcclient"
 	"github.com/Lama189/soundwave-platform/api-geteway/internal/infrastructure/jwt"
 	"github.com/Lama189/soundwave-platform/api-geteway/internal/infrastructure/logger"
+	artistUsecase "github.com/Lama189/soundwave-platform/api-geteway/internal/usecase/artist"
 )
 
 func main() {
@@ -30,7 +30,7 @@ func main() {
 
 	jwtValidator := jwt.NewValidator(cfg.JWT.SecretKey)
 
-	clientMgr := client.NewManager(log)
+	clientMgr := grpcclient.NewManager(log)
 
 	initCtx, cancelInit := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancelInit()
@@ -45,9 +45,25 @@ func main() {
 		os.Exit(1)
 	}
 
-	userSvcClient := userClient.NewClient(userConn, cfg.Services.User.Timeout)
+	catalogConn, err := clientMgr.GetConn(initCtx, cfg.Services.Catalog.Addr)
+	if err != nil {
+		log.Error(
+			"failed to connect to catalog-service",
+			slog.String("addr", cfg.Services.Catalog.Addr),
+			slog.String("error", err.Error()),
+		)
+		os.Exit(1)
+	}
+
+	userSvcClient := grpcclient.NewUserClient(userConn, cfg.Services.User.Timeout)
+	catalogSvcClient := grpcclient.NewArtistClient(catalogConn, cfg.Services.Catalog.Timeout)
+
+	becomeArtistUseCase := artistUsecase.NewBecomeArtistUseCase(catalogSvcClient, userSvcClient, log)
+
 	userHandler := deliveryHttp.NewUserHandler(userSvcClient)
-	router := deliveryHttp.NewRouter(userHandler, jwtValidator)
+	artistHandler := deliveryHttp.NewArtistHandler(catalogSvcClient, becomeArtistUseCase)
+
+	router := deliveryHttp.NewRouter(userHandler, artistHandler, jwtValidator)
 
 	srv := &http.Server{
 		Addr:         cfg.HTTP.Port,

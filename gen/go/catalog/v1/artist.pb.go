@@ -498,6 +498,94 @@ func (x *UpdateArtistResponse) GetArtist() *Artist {
 	return nil
 }
 
+type DeleteArtistRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteArtistRequest) Reset() {
+	*x = DeleteArtistRequest{}
+	mi := &file_catalog_v1_artist_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteArtistRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteArtistRequest) ProtoMessage() {}
+
+func (x *DeleteArtistRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_catalog_v1_artist_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteArtistRequest.ProtoReflect.Descriptor instead.
+func (*DeleteArtistRequest) Descriptor() ([]byte, []int) {
+	return file_catalog_v1_artist_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *DeleteArtistRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *DeleteArtistRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+type DeleteArtistResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteArtistResponse) Reset() {
+	*x = DeleteArtistResponse{}
+	mi := &file_catalog_v1_artist_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteArtistResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteArtistResponse) ProtoMessage() {}
+
+func (x *DeleteArtistResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_catalog_v1_artist_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteArtistResponse.ProtoReflect.Descriptor instead.
+func (*DeleteArtistResponse) Descriptor() ([]byte, []int) {
+	return file_catalog_v1_artist_proto_rawDescGZIP(), []int{10}
+}
+
 var File_catalog_v1_artist_proto protoreflect.FileDescriptor
 
 const file_catalog_v1_artist_proto_rawDesc = "" +
@@ -533,12 +621,17 @@ const file_catalog_v1_artist_proto_rawDesc = "" +
 	"\x04name\x18\x03 \x01(\tR\x04name\x12\x10\n" +
 	"\x03bio\x18\x04 \x01(\tR\x03bio\"B\n" +
 	"\x14UpdateArtistResponse\x12*\n" +
-	"\x06artist\x18\x01 \x01(\v2\x12.catalog.v1.ArtistR\x06artist2\xe1\x02\n" +
+	"\x06artist\x18\x01 \x01(\v2\x12.catalog.v1.ArtistR\x06artist\">\n" +
+	"\x13DeleteArtistRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\"\x16\n" +
+	"\x14DeleteArtistResponse2\xb4\x03\n" +
 	"\rArtistService\x12Q\n" +
 	"\fCreateArtist\x12\x1f.catalog.v1.CreateArtistRequest\x1a .catalog.v1.CreateArtistResponse\x12H\n" +
 	"\tGetArtist\x12\x1c.catalog.v1.GetArtistRequest\x1a\x1d.catalog.v1.GetArtistResponse\x12`\n" +
 	"\x11GetArtistByUserId\x12$.catalog.v1.GetArtistByUserIdRequest\x1a%.catalog.v1.GetArtistByUserIdResponse\x12Q\n" +
-	"\fUpdateArtist\x12\x1f.catalog.v1.UpdateArtistRequest\x1a .catalog.v1.UpdateArtistResponseBCZAgithub.com/Lama189/soundwave-platform/gen/go/catalog/v1;catalogpbb\x06proto3"
+	"\fUpdateArtist\x12\x1f.catalog.v1.UpdateArtistRequest\x1a .catalog.v1.UpdateArtistResponse\x12Q\n" +
+	"\fDeleteArtist\x12\x1f.catalog.v1.DeleteArtistRequest\x1a .catalog.v1.DeleteArtistResponseBCZAgithub.com/Lama189/soundwave-platform/gen/go/catalog/v1;catalogpbb\x06proto3"
 
 var (
 	file_catalog_v1_artist_proto_rawDescOnce sync.Once
@@ -552,7 +645,7 @@ func file_catalog_v1_artist_proto_rawDescGZIP() []byte {
 	return file_catalog_v1_artist_proto_rawDescData
 }
 
-var file_catalog_v1_artist_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_catalog_v1_artist_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_catalog_v1_artist_proto_goTypes = []any{
 	(*Artist)(nil),                    // 0: catalog.v1.Artist
 	(*CreateArtistRequest)(nil),       // 1: catalog.v1.CreateArtistRequest
@@ -563,11 +656,13 @@ var file_catalog_v1_artist_proto_goTypes = []any{
 	(*GetArtistByUserIdResponse)(nil), // 6: catalog.v1.GetArtistByUserIdResponse
 	(*UpdateArtistRequest)(nil),       // 7: catalog.v1.UpdateArtistRequest
 	(*UpdateArtistResponse)(nil),      // 8: catalog.v1.UpdateArtistResponse
-	(*timestamppb.Timestamp)(nil),     // 9: google.protobuf.Timestamp
+	(*DeleteArtistRequest)(nil),       // 9: catalog.v1.DeleteArtistRequest
+	(*DeleteArtistResponse)(nil),      // 10: catalog.v1.DeleteArtistResponse
+	(*timestamppb.Timestamp)(nil),     // 11: google.protobuf.Timestamp
 }
 var file_catalog_v1_artist_proto_depIdxs = []int32{
-	9,  // 0: catalog.v1.Artist.created_at:type_name -> google.protobuf.Timestamp
-	9,  // 1: catalog.v1.Artist.updated_at:type_name -> google.protobuf.Timestamp
+	11, // 0: catalog.v1.Artist.created_at:type_name -> google.protobuf.Timestamp
+	11, // 1: catalog.v1.Artist.updated_at:type_name -> google.protobuf.Timestamp
 	0,  // 2: catalog.v1.CreateArtistResponse.artist:type_name -> catalog.v1.Artist
 	0,  // 3: catalog.v1.GetArtistResponse.artist:type_name -> catalog.v1.Artist
 	0,  // 4: catalog.v1.GetArtistByUserIdResponse.artist:type_name -> catalog.v1.Artist
@@ -576,12 +671,14 @@ var file_catalog_v1_artist_proto_depIdxs = []int32{
 	3,  // 7: catalog.v1.ArtistService.GetArtist:input_type -> catalog.v1.GetArtistRequest
 	5,  // 8: catalog.v1.ArtistService.GetArtistByUserId:input_type -> catalog.v1.GetArtistByUserIdRequest
 	7,  // 9: catalog.v1.ArtistService.UpdateArtist:input_type -> catalog.v1.UpdateArtistRequest
-	2,  // 10: catalog.v1.ArtistService.CreateArtist:output_type -> catalog.v1.CreateArtistResponse
-	4,  // 11: catalog.v1.ArtistService.GetArtist:output_type -> catalog.v1.GetArtistResponse
-	6,  // 12: catalog.v1.ArtistService.GetArtistByUserId:output_type -> catalog.v1.GetArtistByUserIdResponse
-	8,  // 13: catalog.v1.ArtistService.UpdateArtist:output_type -> catalog.v1.UpdateArtistResponse
-	10, // [10:14] is the sub-list for method output_type
-	6,  // [6:10] is the sub-list for method input_type
+	9,  // 10: catalog.v1.ArtistService.DeleteArtist:input_type -> catalog.v1.DeleteArtistRequest
+	2,  // 11: catalog.v1.ArtistService.CreateArtist:output_type -> catalog.v1.CreateArtistResponse
+	4,  // 12: catalog.v1.ArtistService.GetArtist:output_type -> catalog.v1.GetArtistResponse
+	6,  // 13: catalog.v1.ArtistService.GetArtistByUserId:output_type -> catalog.v1.GetArtistByUserIdResponse
+	8,  // 14: catalog.v1.ArtistService.UpdateArtist:output_type -> catalog.v1.UpdateArtistResponse
+	10, // 15: catalog.v1.ArtistService.DeleteArtist:output_type -> catalog.v1.DeleteArtistResponse
+	11, // [11:16] is the sub-list for method output_type
+	6,  // [6:11] is the sub-list for method input_type
 	6,  // [6:6] is the sub-list for extension type_name
 	6,  // [6:6] is the sub-list for extension extendee
 	0,  // [0:6] is the sub-list for field type_name
@@ -598,7 +695,7 @@ func file_catalog_v1_artist_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_catalog_v1_artist_proto_rawDesc), len(file_catalog_v1_artist_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   9,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
