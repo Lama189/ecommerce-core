@@ -8,11 +8,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 )
 
-func NewRouter(
-	userHandler *UserHandler,
-	artistHandler *ArtistHandler,
-	tokenValidator jwt.TokenValidator,
-) *chi.Mux {
+func NewRouter(userHandler *UserHandler, artistHandler *ArtistHandler, tokenValidator jwt.TokenValidator) *chi.Mux {
 	r := chi.NewRouter()
 
 	r.Use(middleware.RequestID)

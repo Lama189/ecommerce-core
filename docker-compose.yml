@@ -25,6 +25,20 @@ services:
     networks:
       - backend-network
 
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    volumes:
+      - miniodata:/data
+    networks:
+      - backend-network
+
   user-service:
     build:
       context: .
@@ -46,6 +60,29 @@ services:
     networks:
       - backend-network
 
+  catalog-service:
+    build:
+      context: .
+      dockerfile: catalog-service/Dockerfile
+    ports:
+      - "50052:50052"
+    environment:
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${CATALOG_DB_NAME}?sslmode=disable
+      - GRPC_PORT=:50052
+      - MINIO_ENDPOINT=${MINIO_ENDPOINT}
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+      - MINIO_USE_SSL=${MINIO_SECURE}
+      - MINIO_BUCKET_NAME=soundwave-audio
+      - MINIO_UPLOAD_EXPIRY=15m
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_started
+    networks:
+      - backend-network
+
   api-gateway:
     build:
       context: .
@@ -57,13 +94,17 @@ services:
       - JWT_SECRET=${JWT_SECRET}
       - USER_SERVICE_GRPC_ADDR=user-service:50051
       - USER_SERVICE_TIMEOUT=5s
+      - CATALOG_SERVICE_GRPC_ADDR=catalog-service:50052
+      - CATALOG_SERVICE_TIMEOUT=5s
     depends_on:
       - user-service
+      - catalog-service
     networks:
       - backend-network
 
 volumes:
   pgdata:
+  miniodata:
 
 networks:
   backend-network:

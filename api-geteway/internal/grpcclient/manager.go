@@ -86,7 +86,7 @@ func (m *Manager) Close() error {
 				firstErr = err
 			}
 		} else {
-			m.logger.Info("gRPC connectin closed", slog.String("target", target))
+			m.logger.Info("gRPC connection closed", slog.String("target", target))
 		}
 	}
 
@@ -145,7 +145,7 @@ func (m *Manager) loggingInterceptor() grpc.UnaryClientInterceptor {
 
 		if err != nil {
 			m.logger.Error(
-				"gRPC call failsed",
+				"gRPC call failed",
 				slog.String("method", method),
 				slog.Duration("duration", duration),
 				slog.String("error", err.Error()),
