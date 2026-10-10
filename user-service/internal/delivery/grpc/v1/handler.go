@@ -121,3 +121,31 @@ func (s *UserGRPCServer) GetUser(ctx context.Context, req *userpb.GetUserRequest
 		},
 	}, nil
 }
+
+func (s *UserGRPCServer) UpdateUserRole(ctx context.Context, req *userpb.UpdateUserRoleRequest) (*userpb.UpdateUserRoleResponse, error) {
+	userID, err := uuid.Parse(req.GetUserId())
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid user id format")
+	}
+
+	updatedUser, err := s.service.UpdateRole(ctx, userID, domain.Role(req.GetRole()))
+	if err != nil {
+		switch {
+		case errors.Is(err, domain.ErrNotFound):
+			return nil, status.Error(codes.NotFound, "user not found")
+		case errors.Is(err, domain.ErrInvalidInput):
+			return nil, status.Error(codes.InvalidArgument, err.Error())
+		default:
+			return nil, status.Error(codes.Internal, "internal server error")
+		}
+	}
+
+	return &userpb.UpdateUserRoleResponse{
+		User: &userpb.User{
+			Id:        updatedUser.ID.String(),
+			Phone:     updatedUser.Phone,
+			Role:      updatedUser.Role,
+			CreatedAt: timestamppb.New(updatedUser.CreatedAt),
+		},
+	}, nil
+}

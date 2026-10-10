@@ -69,6 +69,17 @@ func RestoreUser(id uuid.UUID, phone, passwordHash string, role Role, createdAt,
 	}
 }
 
+func (u *User) UpdateRole(role Role) error {
+	if !role.IsValid() {
+		return fmt.Errorf("%w: invalid user role: %s", ErrInvalidInput, role)
+	}
+
+	u.Role = role
+	u.UpdatedAt = time.Now().UTC()
+
+	return nil
+}
+
 func (u *User) Validate() error {
 	if u.Phone == "" {
 		return fmt.Errorf("phone number cannot be emplty")

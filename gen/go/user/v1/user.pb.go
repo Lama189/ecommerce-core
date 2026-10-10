@@ -482,6 +482,102 @@ func (x *GetUserResponse) GetUser() *User {
 	return nil
 }
 
+type UpdateUserRoleRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Role          string                 `protobuf:"bytes,2,opt,name=role,proto3" json:"role,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateUserRoleRequest) Reset() {
+	*x = UpdateUserRoleRequest{}
+	mi := &file_user_v1_user_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateUserRoleRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateUserRoleRequest) ProtoMessage() {}
+
+func (x *UpdateUserRoleRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_user_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateUserRoleRequest.ProtoReflect.Descriptor instead.
+func (*UpdateUserRoleRequest) Descriptor() ([]byte, []int) {
+	return file_user_v1_user_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *UpdateUserRoleRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *UpdateUserRoleRequest) GetRole() string {
+	if x != nil {
+		return x.Role
+	}
+	return ""
+}
+
+type UpdateUserRoleResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	User          *User                  `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateUserRoleResponse) Reset() {
+	*x = UpdateUserRoleResponse{}
+	mi := &file_user_v1_user_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateUserRoleResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateUserRoleResponse) ProtoMessage() {}
+
+func (x *UpdateUserRoleResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_user_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateUserRoleResponse.ProtoReflect.Descriptor instead.
+func (*UpdateUserRoleResponse) Descriptor() ([]byte, []int) {
+	return file_user_v1_user_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *UpdateUserRoleResponse) GetUser() *User {
+	if x != nil {
+		return x.User
+	}
+	return nil
+}
+
 var File_user_v1_user_proto protoreflect.FileDescriptor
 
 const file_user_v1_user_proto_rawDesc = "" +
@@ -513,12 +609,18 @@ const file_user_v1_user_proto_rawDesc = "" +
 	"\x0eGetUserRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"4\n" +
 	"\x0fGetUserResponse\x12!\n" +
-	"\x04user\x18\x01 \x01(\v2\r.user.v1.UserR\x04user2\x82\x02\n" +
+	"\x04user\x18\x01 \x01(\v2\r.user.v1.UserR\x04user\"D\n" +
+	"\x15UpdateUserRoleRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x12\n" +
+	"\x04role\x18\x02 \x01(\tR\x04role\";\n" +
+	"\x16UpdateUserRoleResponse\x12!\n" +
+	"\x04user\x18\x01 \x01(\v2\r.user.v1.UserR\x04user2\xd5\x02\n" +
 	"\vUserService\x12?\n" +
 	"\bRegister\x12\x18.user.v1.RegisterRequest\x1a\x19.user.v1.RegisterResponse\x126\n" +
 	"\x05Login\x12\x15.user.v1.LoginRequest\x1a\x16.user.v1.LoginResponse\x12<\n" +
 	"\aRefresh\x12\x17.user.v1.RefreshRequest\x1a\x18.user.v1.RefreshResponse\x12<\n" +
-	"\aGetUser\x12\x17.user.v1.GetUserRequest\x1a\x18.user.v1.GetUserResponseB=Z;github.com/Lama189/soundwave-platform/gen/go/user/v1;userpbb\x06proto3"
+	"\aGetUser\x12\x17.user.v1.GetUserRequest\x1a\x18.user.v1.GetUserResponse\x12Q\n" +
+	"\x0eUpdateUserRole\x12\x1e.user.v1.UpdateUserRoleRequest\x1a\x1f.user.v1.UpdateUserRoleResponseB=Z;github.com/Lama189/soundwave-platform/gen/go/user/v1;userpbb\x06proto3"
 
 var (
 	file_user_v1_user_proto_rawDescOnce sync.Once
@@ -532,37 +634,42 @@ func file_user_v1_user_proto_rawDescGZIP() []byte {
 	return file_user_v1_user_proto_rawDescData
 }
 
-var file_user_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_user_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_user_v1_user_proto_goTypes = []any{
-	(*User)(nil),                  // 0: user.v1.User
-	(*RegisterRequest)(nil),       // 1: user.v1.RegisterRequest
-	(*RegisterResponse)(nil),      // 2: user.v1.RegisterResponse
-	(*LoginRequest)(nil),          // 3: user.v1.LoginRequest
-	(*LoginResponse)(nil),         // 4: user.v1.LoginResponse
-	(*RefreshRequest)(nil),        // 5: user.v1.RefreshRequest
-	(*RefreshResponse)(nil),       // 6: user.v1.RefreshResponse
-	(*GetUserRequest)(nil),        // 7: user.v1.GetUserRequest
-	(*GetUserResponse)(nil),       // 8: user.v1.GetUserResponse
-	(*timestamppb.Timestamp)(nil), // 9: google.protobuf.Timestamp
+	(*User)(nil),                   // 0: user.v1.User
+	(*RegisterRequest)(nil),        // 1: user.v1.RegisterRequest
+	(*RegisterResponse)(nil),       // 2: user.v1.RegisterResponse
+	(*LoginRequest)(nil),           // 3: user.v1.LoginRequest
+	(*LoginResponse)(nil),          // 4: user.v1.LoginResponse
+	(*RefreshRequest)(nil),         // 5: user.v1.RefreshRequest
+	(*RefreshResponse)(nil),        // 6: user.v1.RefreshResponse
+	(*GetUserRequest)(nil),         // 7: user.v1.GetUserRequest
+	(*GetUserResponse)(nil),        // 8: user.v1.GetUserResponse
+	(*UpdateUserRoleRequest)(nil),  // 9: user.v1.UpdateUserRoleRequest
+	(*UpdateUserRoleResponse)(nil), // 10: user.v1.UpdateUserRoleResponse
+	(*timestamppb.Timestamp)(nil),  // 11: google.protobuf.Timestamp
 }
 var file_user_v1_user_proto_depIdxs = []int32{
-	9, // 0: user.v1.User.created_at:type_name -> google.protobuf.Timestamp
-	0, // 1: user.v1.RegisterResponse.user:type_name -> user.v1.User
-	0, // 2: user.v1.LoginResponse.user:type_name -> user.v1.User
-	0, // 3: user.v1.GetUserResponse.user:type_name -> user.v1.User
-	1, // 4: user.v1.UserService.Register:input_type -> user.v1.RegisterRequest
-	3, // 5: user.v1.UserService.Login:input_type -> user.v1.LoginRequest
-	5, // 6: user.v1.UserService.Refresh:input_type -> user.v1.RefreshRequest
-	7, // 7: user.v1.UserService.GetUser:input_type -> user.v1.GetUserRequest
-	2, // 8: user.v1.UserService.Register:output_type -> user.v1.RegisterResponse
-	4, // 9: user.v1.UserService.Login:output_type -> user.v1.LoginResponse
-	6, // 10: user.v1.UserService.Refresh:output_type -> user.v1.RefreshResponse
-	8, // 11: user.v1.UserService.GetUser:output_type -> user.v1.GetUserResponse
-	8, // [8:12] is the sub-list for method output_type
-	4, // [4:8] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	11, // 0: user.v1.User.created_at:type_name -> google.protobuf.Timestamp
+	0,  // 1: user.v1.RegisterResponse.user:type_name -> user.v1.User
+	0,  // 2: user.v1.LoginResponse.user:type_name -> user.v1.User
+	0,  // 3: user.v1.GetUserResponse.user:type_name -> user.v1.User
+	0,  // 4: user.v1.UpdateUserRoleResponse.user:type_name -> user.v1.User
+	1,  // 5: user.v1.UserService.Register:input_type -> user.v1.RegisterRequest
+	3,  // 6: user.v1.UserService.Login:input_type -> user.v1.LoginRequest
+	5,  // 7: user.v1.UserService.Refresh:input_type -> user.v1.RefreshRequest
+	7,  // 8: user.v1.UserService.GetUser:input_type -> user.v1.GetUserRequest
+	9,  // 9: user.v1.UserService.UpdateUserRole:input_type -> user.v1.UpdateUserRoleRequest
+	2,  // 10: user.v1.UserService.Register:output_type -> user.v1.RegisterResponse
+	4,  // 11: user.v1.UserService.Login:output_type -> user.v1.LoginResponse
+	6,  // 12: user.v1.UserService.Refresh:output_type -> user.v1.RefreshResponse
+	8,  // 13: user.v1.UserService.GetUser:output_type -> user.v1.GetUserResponse
+	10, // 14: user.v1.UserService.UpdateUserRole:output_type -> user.v1.UpdateUserRoleResponse
+	10, // [10:15] is the sub-list for method output_type
+	5,  // [5:10] is the sub-list for method input_type
+	5,  // [5:5] is the sub-list for extension type_name
+	5,  // [5:5] is the sub-list for extension extendee
+	0,  // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_user_v1_user_proto_init() }
@@ -576,7 +683,7 @@ func file_user_v1_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_v1_user_proto_rawDesc), len(file_user_v1_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   9,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

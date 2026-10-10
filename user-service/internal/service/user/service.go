@@ -122,3 +122,25 @@ func (s *Service) GetByID(ctx context.Context, id uuid.UUID) (*UserOutputDTO, er
 
 	return toOutputDTO(u), nil
 }
+
+func (s *Service) UpdateRole(ctx context.Context, userID uuid.UUID, role domain.Role) (*UserOutputDTO, error) {
+	u, err := s.repo.GetByID(ctx, userID)
+	if err != nil {
+		if errors.Is(err, domain.ErrNotFound) {
+			return nil, domain.ErrNotFound
+		}
+		return nil, fmt.Errorf("get user by id: %w", err)
+	}
+
+	if err := u.UpdateRole(role); err != nil {
+		return nil, fmt.Errorf("update user role: %w", err)
+	}
+
+	if err := s.repo.Update(ctx, u); err != nil {
+		return nil, fmt.Errorf("save updated user: %w", err)
+	}
+
+	_ = s.cache.Delete(ctx, u.ID)
+
+	return toOutputDTO(u), nil
+}

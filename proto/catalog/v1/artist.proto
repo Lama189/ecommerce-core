@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package catalog.v1;
+
+option go_package = "github.com/Lama189/soundwave-platform/gen/go/catalog/v1;catalogpb";
+
+import "google/protobuf/timestamp.proto";
+
+service ArtistService {
+  rpc CreateArtist(CreateArtistRequest) returns (CreateArtistResponse);
+  rpc GetArtist(GetArtistRequest) returns (GetArtistResponse);
+  rpc GetArtistByUserId(GetArtistByUserIdRequest) returns (GetArtistByUserIdResponse);
+  rpc UpdateArtist(UpdateArtistRequest) returns (UpdateArtistResponse);
+}
+
+message Artist {
+  string id = 1;
+  string user_id = 2;
+  string name = 3;
+  string bio = 4;
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+}
+
+message CreateArtistRequest {
+  string user_id = 1;
+  string name = 2;
+  string bio = 3;
+}
+
+message CreateArtistResponse {
+  Artist artist = 1;
+}
+
+message GetArtistRequest {
+  string id = 1;
+}
+
+message GetArtistResponse {
+  Artist artist = 1;
+}
+
+message GetArtistByUserIdRequest {
+  string user_id = 1;
+}
+
+message GetArtistByUserIdResponse {
+  Artist artist = 1;
+}
+
+message UpdateArtistRequest {
+  string id = 1;
+  string user_id = 2;
+  string name = 3;
+  string bio = 4;
+}
+
+message UpdateArtistResponse {
+  Artist artist = 1;
+}
